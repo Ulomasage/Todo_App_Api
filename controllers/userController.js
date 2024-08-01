@@ -26,16 +26,16 @@ exports.signUp = async (req, res) => {
             password:hashedPassword
           
         })
-        const userToken = jwt.sign({id:user._id, email:user.email},process.env.JWT_SECRET,{expiresIn:"20minutes"})
-        const verifyLink = `${req.protocol}://${req.get("host")}/api/v1/users/verify${user._id}/${userToken}`
-        const mailOption = {
-            subject: "email verification",
-            email: user.email,
-            html:signUpTemplate(verifyLink, user.fullname)
-        }
+        // const userToken = jwt.sign({id:user._id, email:user.email},process.env.JWT_SECRET,{expiresIn:"20minutes"})
+        // const verifyLink = `${req.protocol}://${req.get("host")}/api/v1/users/verify${user._id}/${userToken}`
+        // const mailOption = {
+        //     subject: "email verification",
+        //     email: user.email,
+        //     html:signUpTemplate(verifyLink, user.fullname)
+        // }
 
         await user.save();
-        await sendMail(mailOption),
+        // await sendMail(mailOption),
         res.status(201).json({
             message: 'User created successfully',
             data: user
@@ -115,7 +115,7 @@ exports.resendVerification = async(req,res)=>{
             subject:"verification email",
             html:verifyTemplate(verifyLink,user.fullname)
         }
-        sendMail(mailOptions)
+       await sendMail(mailOptions)
         res.status(200).json({message:"verification link sent to your email"})
     } catch (error) {
         res.status(500).json(error.message) 
