@@ -26,20 +26,26 @@ exports.signUp = async (req, res) => {
             password:hashedPassword
           
         })
-        // const userToken = jwt.sign({id:user._id, email:user.email},process.env.JWT_SECRET,{expiresIn:"20minutes"})
-        // const verifyLink = `${req.protocol}://${req.get("host")}/api/v1/users/verify${user._id}/${userToken}`
-        // const mailOption = {
-        //     subject: "email verification",
-        //     email: user.email,
-        //     html:signUpTemplate(verifyLink, user.fullname)
-        // }
+        const userToken = jwt.sign(
+            { id: user._id, email: user.email },
+            process.env.jwt_secret,
+            { expiresIn: "10 Minutes" }
+        );
+        const verifyLink = `${req.protocol}://${req.get(
+            "host"
+        )}/api/v1/user/verify/${userToken}`;
 
         await user.save();
-        // await sendMail(mailOption),
+        await sendMail({
+            subject: `Kindly Verify your mail`,
+            email: user.email,
+            html: signUpTemplate(verifyLink, user.fullname),
+        });
         res.status(201).json({
-            message: 'User created successfully',
-            data: user
-        })
+            status:'created successfully',
+            message: `Welcome ${user.fullname} to your todo list, kindly check your mail to access your link to verify your email`,
+            data: user,
+        });
     }
     } catch (error) {
         res.status(500).json({

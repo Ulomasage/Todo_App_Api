@@ -32,15 +32,15 @@ exports.CreateContent = async(req,res)=>{
 exports.getOneContent= async (req,res)=>{
     try {
         const {todoId}= req.params;
-        const todo = await TodoModel.findOne(todoId)
-        if(!todo){
+        const oneTodo = await TodoModel.findById(todoId)
+        if(!oneTodo){
             return res.status(404).json({
                 message: 'not found'
             })
         }
         res.status(200).json({
             message:'content retrived successfully',
-            data:todo
+            data:oneTodo
         })
 
     } catch (error) {
@@ -66,16 +66,16 @@ exports.updateContent = async(req,res)=>{
         const {userId} = req.user;
        const {todoId}= req.params;
        const {title, content}=req.body;
-       const user = await UserModel.findByIdAndUpdate(userId)
+       const user = await UserModel.findById(userId)
         if(!user){
             return res.status(404).json({
                 message: ' user not found'
             })
         }
-       const todo = await TodoModel.findByIdAndUpdate(todoId)
+       const todo = await TodoModel.findById(todoId)
        if(!todo){
-        return res.status(500).json({
-            message:'not found'
+        return res.status(404).json({
+            message:'todo not found'
         })
        };
        if(todo.user.toString() !== userId.toString()){
@@ -87,10 +87,10 @@ exports.updateContent = async(req,res)=>{
         title: title||todo.title,
         content:content||todo.content
        }
-       const updateContent = await TodoModel.findByIdAndUpdate(data)
+       const updatedContent = await TodoModel.findByIdAndUpdate(todoId,data, {new:true})
        res.status(200).json({
         message:'updated successfully',
-        data:updateContent
+        data:updatedContent
        })
     } catch (error) {
         res.status(500).json(error.message)
@@ -99,7 +99,16 @@ exports.updateContent = async(req,res)=>{
 
 exports.removeContent = async(req, res)=>{
     try {
+        const {userId}=req.user;
        const {todoId}=req.params;
+
+       const user = await UserModel.findById(userId)
+       if(!user){
+           return res.status(404).json({
+               message: ' user not found'
+           })
+       }
+       
        const todo = await TodoModel.findById(todoId)
        if(!todo){
         res.status(404).json({

@@ -6,8 +6,8 @@ const router = express.Router()
 
 router.post('/sign-up',signUp)
 router.post("/login",logIn)
-router.get("/login",getOneUser)
-router.get("/login",authenticate,isAdmin,getAllUsers)
+router.get("/one-user/:userId",getOneUser)
+router.get("/all-user",authenticate,isAdmin,getAllUsers)
 router.get("/verifyuser/:token",verifyEmail)
 router.get("/reverify",resendVerification)
 router.post('/forgot-password',forgotPassword);

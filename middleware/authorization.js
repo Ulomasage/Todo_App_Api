@@ -23,7 +23,7 @@ exports.authenticate = async (req, res, next) => {
 
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
-        const user = await userModel.findById(decodedToken.userId);
+        const user = await UserModel.findById(decodedToken.userId);
 
         if (!user) {
             return res.status(404).json({
