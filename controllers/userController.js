@@ -20,6 +20,7 @@ exports.signUp = async (req, res) => {
         const saltedPassword = await bcrypt.genSalt(10)
         const hashedPassword = await bcrypt.hash(password,saltedPassword)
          
+        
          const user = new UserModel({
             fullname,
             email:email.toLowerCase(),
