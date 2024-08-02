@@ -33,11 +33,11 @@ exports.signUp = async (req, res) => {
             process.env.JWT_SECRET,
             { expiresIn: "20 Minutes" }
         );
-        const verifyLink = `https://todo-app-api-0ath.onrender.com/api/v1/user/verify/${userToken}`;
+        user.token = userToken
         let mailOptions={
             email: user.email,
             subject: `Kindly Verify your mail`,
-            html: signUpTemplate(verifyLink, user.fullname),
+            html: `please click on the link to verify your email:<a href="https://todo-app-api-0ath.onrender.com/api/v1/user/verify-email/${userToken}">verify email</a>`,
         }
         await user.save();
         await sendMail(mailOptions);

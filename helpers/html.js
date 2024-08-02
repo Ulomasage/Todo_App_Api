@@ -1,4 +1,4 @@
-const signUpTemplate = (verifyLink, fullName) => {
+const signUpTemplate = (verifyLink, fullname) => {
     return `
       <!DOCTYPE html>
       <html lang="en">
@@ -59,7 +59,7 @@ const signUpTemplate = (verifyLink, fullName) => {
             <h1>Welcome to Midas To-Do App!</h1>
           </div>
           <div class="content">
-            <p>Hello ${fullName},</p>
+            <p>Hello ${fullname},</p>
             <p>Thank you for joining our community! We're thrilled to have you on board.</p>
             <p>Please click the button below to verify your account:</p>
             <p>
@@ -78,7 +78,7 @@ const signUpTemplate = (verifyLink, fullName) => {
   };
 
 
-  const verifyTemplate = (verifyLink, fullName) => {
+  const verifyTemplate = (verifyLink, fullname) => {
       return `
       <!DOCTYPE html>
   <html>
@@ -154,7 +154,7 @@ const signUpTemplate = (verifyLink, fullName) => {
     </html>
   `;
 };
-  const forgotPasswordTemplate = (resetLink, fullName) => {
+  const forgotPasswordTemplate = (resetLink, fullname) => {
     return `
       <!DOCTYPE html>
       <html lang="en">
@@ -215,7 +215,7 @@ const signUpTemplate = (verifyLink, fullName) => {
             <h1>Reset Your Password</h1>
           </div>
           <div class="content">
-            <p>Hello ${fullName},</p>
+            <p>Hello ${fullname},</p>
             <p>We received a request to reset your password. If you didn't make this request, please ignore this email.</p>
             <p>Click the button below to reset your password:</p>
             <p>
