@@ -2,7 +2,7 @@ const UserModel = require('../models/userModel');
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
-// const sendMail=require("../helpers/email")
+const sendMail=require("../helpers/email")
 const {signUpTemplate,verifyTemplate}=require("../helpers/html")
 const fs = require('fs');
 
@@ -27,21 +27,20 @@ exports.signUp = async (req, res) => {
             password:hashedPassword
           
         })
-        // const userToken = jwt.sign(
-        //     { id: user._id, email: user.email },
-        //     process.env.JWT_SECRET,
-        //     { expiresIn: "10 Minutes" }
-        // );
-        // const verifyLink = `${req.protocol}://${req.get(
-        //     "host"
-        // )}/api/v1/user/verify/${userToken}`;
-
+        const userToken = jwt.sign({
+            userId: user._id, 
+            email:user.email },
+            process.env.JWT_SECRET,
+            { expiresIn: "20 Minutes" }
+        );
+        const verifyLink = `https://todo-app-api-0ath.onrender.com/api/v1/user/verify/${userToken}`;
+        let mailOptions={
+            email: user.email,
+            subject: `Kindly Verify your mail`,
+            html: signUpTemplate(verifyLink, user.fullname),
+        }
         await user.save();
-        // await sendMail({
-        //     subject: `Kindly Verify your mail`,
-        //     email: user.email,
-        //     html: signUpTemplate(verifyLink, user.fullname),
-        // });
+        await sendMail(mailOptions);
         res.status(201).json({
             status:'created successfully',
             message: `Welcome ${user.fullname} to your todo list, kindly check your mail to access your link to verify your email`,

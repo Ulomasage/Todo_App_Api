@@ -5,7 +5,7 @@ const signUpTemplate = (verifyLink, fullName) => {
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Welcome to Midas To-Do App!</title>
+        <title>Welcome to Uloma Todo App!</title>
         <style>
           body {
             font-family: Arial, sans-serif;
@@ -65,11 +65,11 @@ const signUpTemplate = (verifyLink, fullName) => {
             <p>
               <a href="${verifyLink}" class="button">Verify My Account</a>
             </p>
-            <p>If you did not create an account, please ignore this email.</p>
-            <p>Best regards,<br>Jay Midas Team</p>
+            <p>If you did not create an account, please kindly ignore this email.</p>
+            <p>Best regards,<br>Uloma's lovely Team</p>
           </div>
           <div class="footer">
-            <p>&copy; ${new Date().getFullYear()} Jay Midas Corp. All rights reserved.</p>
+            <p>&copy; ${new Date().getFullYear()} Uloma's Unique Corp. All rights reserved.</p>
           </div>
         </div>
       </body>
@@ -84,7 +84,7 @@ const signUpTemplate = (verifyLink, fullName) => {
   <html>
   <head>
       <meta charset="UTF-8">
-      <title>Welcome to Midas To-Do App</title>
+      <title>Welcome to Uloma Todo App</title>
       <style>
       body {
         font-family: Arial, sans-serif;
@@ -143,11 +143,11 @@ const signUpTemplate = (verifyLink, fullName) => {
           <p>
             <a href="${verifyLink}" class="button">Verify My Account</a>
           </p>
-          <p>If you did not create an account, please ignore this email.</p>
-          <p>Best regards,<br>Jay Midas Team</p>
+          <p>If you did not create an account, please kindly ignore this email.</p>
+          <p>Best regards,<br>Uloma's lovely Team</p>
         </div>
         <div class="footer">
-          <p>&copy; ${new Date().getFullYear()} Jay Midas Corp. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} Uloma Unique Corp. All rights reserved.</p>
         </div>
       </div>
     </body>

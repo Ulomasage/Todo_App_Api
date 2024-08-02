@@ -5,7 +5,7 @@ const { authenticate, isAdmin } = require('../middleware/authorization')
 const router = express.Router()
 
 router.post('/sign-up',signUp)
-router.post("/login",logIn)
+router.post("/login",authenticate,logIn)
 router.get("/one-user/:userId",getOneUser)
 router.get("/all-user",authenticate,isAdmin,getAllUsers)
 router.put("/make-admin/:userId",makeAdmin)
