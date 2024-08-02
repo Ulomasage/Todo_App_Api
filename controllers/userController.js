@@ -2,7 +2,7 @@ const UserModel = require('../models/userModel');
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
-const sendMail=require("../helpers/email")
+// const sendMail=require("../helpers/email")
 const {signUpTemplate,verifyTemplate}=require("../helpers/html")
 const fs = require('fs');
 
@@ -27,21 +27,21 @@ exports.signUp = async (req, res) => {
             password:hashedPassword
           
         })
-        const userToken = jwt.sign(
-            { id: user._id, email: user.email },
-            process.env.jwt_secret,
-            { expiresIn: "10 Minutes" }
-        );
-        const verifyLink = `${req.protocol}://${req.get(
-            "host"
-        )}/api/v1/user/verify/${userToken}`;
+        // const userToken = jwt.sign(
+        //     { id: user._id, email: user.email },
+        //     process.env.JWT_SECRET,
+        //     { expiresIn: "10 Minutes" }
+        // );
+        // const verifyLink = `${req.protocol}://${req.get(
+        //     "host"
+        // )}/api/v1/user/verify/${userToken}`;
 
         await user.save();
-        await sendMail({
-            subject: `Kindly Verify your mail`,
-            email: user.email,
-            html: signUpTemplate(verifyLink, user.fullname),
-        });
+        // await sendMail({
+        //     subject: `Kindly Verify your mail`,
+        //     email: user.email,
+        //     html: signUpTemplate(verifyLink, user.fullname),
+        // });
         res.status(201).json({
             status:'created successfully',
             message: `Welcome ${user.fullname} to your todo list, kindly check your mail to access your link to verify your email`,
@@ -67,7 +67,7 @@ exports.logIn = async(req,res)=>{
        if(!confirmPassword){
         return res.status(400).json({message:"incorrect password"})
         }
-        const token = await jwt.sign({userId:existingUser._id, email:existingUser.email},process.env.JWT_SECRET,{expiresIn:"1h"})
+        const token = await jwt.sign({userId:existingUser._id, email:existingUser.email, isAdmin: existingUser.isAdmin},process.env.JWT_SECRET,{expiresIn:"1h"})
         res.status(200).json({
             message:"login successful", data:existingUser, token
            })
@@ -77,6 +77,22 @@ exports.logIn = async(req,res)=>{
     }
 }
 
+exports.makeAdmin = async(req,res)=>{
+    try {
+        const {userId} = req.params
+        const user = await UserModel.findById(userId)
+        if(!user){
+            return res.status(404).json({message:"user not found"})
+        }
+        user.isAdmin = true
+        await user.save()
+        res.status(200).json({
+            message:"user now an admin", data:user
+           })
+    } catch (error) {
+        res.status(500).json(error.message)
+    }
+}
 exports.verifyEmail = async(req,res)=>{
     try {
        const {token} = req.params
@@ -237,9 +253,15 @@ exports.changePassword = async (req, res) => {
 
 exports.getAllUsers = async(req,res)=>{
     try {
-        const allusers = await TodoModel.find()
+        const allusers = await UserModel.find()
+        if(allusers.length <=0){
+            return res.status(400).json({
+                message:"No available registered users"
+            })
+        }
         res.status(200).json({
             message:'List of all users in the database',
+            totalUsersRegistered:allusers.length,
             data:allusers
         })
     } catch (error) {
@@ -251,12 +273,14 @@ exports.getAllUsers = async(req,res)=>{
 exports.deleteUser = async(req,res)=>{
     try {
         const {userId} = req.params
-        const deletedUser = await UserModel.findByIdAndDelete(userId)
-        if(!deletedUser){
+        const user = await UserModel.findById(userId)
+        if(!user){
             res.status(404).json({
                 message:'User not found'
             })
            }
+
+        const deletedUser = await UserModel.findByIdAndDelete(userId)
         res.status(200).json({
             message:'User deleted successfully',
         })
@@ -269,14 +293,14 @@ exports.deleteUser = async(req,res)=>{
 exports.getOneUser = async (req, res) => {
     try {
         const { userId } = req.params
-        const oneUser = await UserModel.findById(userId);
+        const oneUser = await UserModel.findOne(userId);
         if(!oneUser){
             return res.status(404).json({
                 message: 'User not found'
             })
         }
         res.status(200).json({
-            message: 'User details',
+            message: 'Below is the one user found',
             data: oneUser
         })
     } catch (error) {
